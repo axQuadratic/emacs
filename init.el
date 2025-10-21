@@ -10,6 +10,9 @@
 (setq-default custom-file (locate-user-emacs-file "custom-vars.el"))
 (load custom-file 'noerror 'nomessage)
 
+(setq-default func-file (locate-user-emacs-file "custom-funcs.el"))
+(load func-file 'noerror 'nomessage)
+	
 ;; Use-packages are loaded from this file
 (setq-default package-file (locate-user-emacs-file "installed-packages.el"))
 (load package-file 'noerror 'nomessage)
@@ -27,12 +30,12 @@
 
 ;; Major modes love to clobber this one, and I *absolutely do not want it set to anything other than this*
 (put 'indent-line-function 'permanent-local t)
-(setq-default indent-line-function 'tab-to-tab-stop)
+(setq-default indent-line-function 'insert-tab)
 
 ;; If that still doesn't stop them, here's the nuclear option
 (add-hook 'after-change-major-mode-hook
 		  (lambda ()
-			(setq indent-line-function 'tab-to-tab-stop)))
+			(setq indent-line-function 'insert-tab)))
 
 (menu-bar-mode -1)
 (tool-bar-mode -1)
@@ -42,19 +45,12 @@
 (save-place-mode 1)
 (blink-cursor-mode 0) 
 (electric-pair-mode 1)
+(electric-indent-mode -1)
 (global-display-line-numbers-mode 1)
 
 (fset 'yes-or-no-p 'y-or-n-p)
 
-;; Corfu settings
-(global-corfu-mode 1)
-
-(setq-default corfu-auto t
-	  corfu-quit-no-match t)
-
 ;; Visuals
-(set-frame-font "CozetteVector 13" nil t)
-
 (setq-default modus-vivendi-palette-overrides
       '((cursor "#ee7f01")
 		(bg-main "#070707")
@@ -86,4 +82,11 @@
 		(fg-completion-match-3 "be4f00")))
 
 (load-theme 'modus-vivendi t)
+
+(add-to-list 'default-frame-alist '(font . "CozetteVector 14"))
+(add-to-list 'default-frame-alist '(alpha-background . 80))
+	
 (put 'upcase-region 'disabled nil)
+
+;; Keybinds
+(bind-key "<backtab>" 'delete-tab)
